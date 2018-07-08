@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %} 
+
+{% block stylesheets %}
+<link rel="stylesheet" href="../css/listPatient.css">
+<link rel="stylesheet" href="../css/datatables.min.css">
+
+  {% block specificCSS %}
+  {% endblock %}
+
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+      {% block descriptionTable %}
+      {% endblock %}
+
+      <div class="table-responsive">
+        <table id="mytable" class="table table-bordred table-striped">
+          <thead>
+            <tr>
+              {% block fieldsHeadPrincipalTable %}
+              {% endblock %}  
+            </tr>
+          </thead>
+
+          <tbody>
+
+            
+            {% block fieldsBodyPrincipalTable %}
+            {% endblock %}
+              
+          </tbody>
+        
+        </table>
+
+
+  </div>
+
+  {% block demographicsView %}
+  {% endblock %}
+
+
+  <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+          </button>
+          <h4 class="modal-title custom_align" id="Heading">Editar</h4>
+        </div>
+
+        {% block formEdit %}
+        {% endblock %}
+        
+        
+      </div>
+    <!-- /.modal-content --> 
+    </div>
+  <!-- /.modal-dialog --> 
+  </div>
+  
+  {% block formDelete %}
+  {% endblock %}
+
+</div>
+{% endblock %}
+
+
+{% block javascripts %}
+  <script src="../js/datatables.min.js"></script>
+  {% block specificJs %}
+  {% endblock %}
+{% endblock %}
+
+
+{% block footer %}
+    {% include 'footer.html.twig' %}
+{% endblock %}

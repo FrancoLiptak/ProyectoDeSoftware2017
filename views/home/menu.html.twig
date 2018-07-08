@@ -1,0 +1,31 @@
+<li>
+    <a href="#" class="[ dropdown-toggle ][ animate ]" data-toggle="dropdown"> Menu <span class="[ caret ]"></span></a>
+    <ul class="[ dropdown-menu ]" role="menu">
+        <li><a href="?controlador=listPatient" class="drop-element [ animate ]"> 
+            <span class="pull-left">Ver Pacientes</span> 
+            <span class="[ pull-right glyphicon glyphicon-th-list ]"></span></a></li>
+        <li><a href="?controlador=registerPatient" class="drop-element [ animate ]">
+            <span class="pull-left">Nuevo</span>
+            <span class="[ pull-right glyphicon glyphicon-plus ]"></span></a></li>
+        {% if isAdmin == 1 %}
+            <li class="divider"></li> 
+            <li><a href="?controlador=listUsers" class="[ animate ] drop-element">
+                <span class="pull-left">Ver Usuarios</span>
+                <span class="[ pull-right glyphicon glyphicon-th-list ]"></span></a></li>
+            <li><a href="?controlador=listUsers&accion=create" class="[ animate ] drop-element">
+                <span class="pull-left">Nuevo</span>
+                <span class="[ pull-right glyphicon glyphicon-plus ]"></span></a></li>
+        {% endif %}
+        {% if configurationPermission %}
+            <li class="divider"></li> 
+            <li><a href="?controlador=configuration&accion=baseView" class="[ animate ] drop-element">
+                <span class="pull-left">Configuración</span>
+                <span class="[ pull-right glyphicon glyphicon-pencil ]"></span></a></li>
+        {% endif %}
+    </ul>
+</li>
+
+
+{% block javascripts %}
+<script src="../js/jquery-3.2.1.min.js"></script>
+{% endblock %}

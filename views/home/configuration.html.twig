@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %} 
+
+{% block stylesheets %}
+<link rel="stylesheet" href="../css/form.css">
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    {% include 'errorMessage.html.twig' %}
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-form">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <a href="#" class="active" id="configuration-form-link">Configuracion</a>
+                        </div>
+                    </div>
+                <hr>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <form id="configuration-form" action="?controlador=configuration&accion=update" method="post" style="display: block;">
+                                <div class="form-group">
+                                    <h4>Titulo</h4>
+                                    <input type="text" name="title" id="title" tabindex="1" class="form-control" placeholder="Titulo" required
+                                        value="{%- for config in configuration -%}
+                                                    {%- if (config.nombre == 'title') -%}
+                                                        {{- config.valor -}}
+                                                    {%- endif -%}
+                                                {%- endfor -%}">
+                                </div>
+                                <div class="form-group">
+                                    <h4>Email</h4>
+                                    <input type="text" name="email" id="email" tabindex="2" class="form-control" placeholder="Email" required
+                                        value="{%- for config in configuration -%}
+                                                    {%- if (config.nombre == 'email') -%}
+                                                        {{- config.valor -}}
+                                                    {%- endif -%}
+                                                {%- endfor -%}">
+                                </div>
+                                <div class="form-group">
+                                    <h4>Descripcion</h4>
+                                    <textarea rows="6" name="description" id="description" tabindex="3" class="form-control" placeholder="Descripcion" required >
+                                        {%- for config in configuration -%}
+                                            {%- if (config.nombre == 'description') -%}
+                                                {{- config.valor -}}
+                                            {%- endif -%}
+                                        {%- endfor -%}
+                                    </textarea>
+                                </div>
+                                <div class="form-group">
+                                    <h4>Elementos por pagina</h4>
+                                    <input type="number" name="pageSize" id="pageSize" tabindex="4" class="form-control" placeholder="Elementos Por Pagina" required
+                                        value="{%- for config in configuration -%}
+                                                    {%- if (config.nombre == 'pageSize') -%}
+                                                        {{- config.valor -}}
+                                                    {%- endif -%}
+                                                {%- endfor -%}">
+                                </div>
+                                <div class="form-group">
+                                    <h4>¿Sitio en mantenimiento?</h4>
+                                    {%- for config in configuration -%}
+                                        {%- if (config.nombre == 'maintenance') -%}
+                                            {%- if (config.valor == 'disable') -%}
+                                                <label class="radio-inline"><input type="radio" name="maintenance" tabindex="5" value="disable" checked>Deshabilitar pagina</label>
+                                                <label class="radio-inline"><input type="radio" name="maintenance" tabindex="6" value="enable">Habilitar pagina</label>
+                                            {%- else -%}
+                                                <label class="radio-inline"><input type="radio" name="maintenance" tabindex="5" value="disable">Deshabilitar pagina</label>
+                                                <label class="radio-inline"><input type="radio" name="maintenance" tabindex="6" value="enable" checked>Habilitar pagina</label>
+                                            {%- endif -%}
+                                        {%- endif -%}
+                                    {%- endfor -%}
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-6 col-sm-offset-3">
+                                            <input type="submit" name="configuration-submit" id="configuration-submit" tabindex="7" class="form-control btn btn-form" value="Aceptar">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+    {% include 'footer.html.twig' %}
+{% endblock %}

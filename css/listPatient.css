@@ -1,0 +1,22 @@
+.moduleDemographic{
+    margin: 0 auto !important;
+}
+
+.modal-body{
+    margin-bottom: 50px !important;
+}
+
+.header-title{
+    display: inline-block    
+}
+
+.topButton {
+    float: right;
+    display: inline-block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.header {
+    overflow: hidden
+}

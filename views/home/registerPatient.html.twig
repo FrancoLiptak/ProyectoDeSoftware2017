@@ -1,0 +1,138 @@
+{% extends 'base.html.twig' %} 
+{% block stylesheets %}
+<link rel="stylesheet" href="../css/registerPatient.css">
+{% endblock %}
+
+{% block body %}
+
+{% include 'errorMessage.html.twig' %}
+<div class="container register-patient-container">
+
+    <h2>Información personal</h2>
+	
+    <form id="registerPatient-form"  action="?controlador=registerPatient&accion=createPatient" method="post" style="display: block;">
+        <div class="row setup-content">
+            <div class="col-xs-12">
+                <div class="col-md-12 well">
+                    <div class="modal-body">
+                        <div class="form-group col-md-6">
+                            <h4>Apellido</h4>
+                            <input class="form-control" type="text" placeholder="Apellido" name="last-name" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,64}" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <h4>Nombre</h4>
+                            <input class="form-control" type="text" placeholder="Nombre" name="first-name" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <h4>Fecha de nacimiento</h4>
+                            <input class="form-control" type="date" name="birthday" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <h4>Tipo de documento</h4>
+                            <select class="form-control" id="selectTipoDocumento" name="document-type" required>
+                                <!-- recursos[0] es el tipo de documento -->
+                                <option value="" disabled selected hidden>Elija una opcion</option>
+                                {% for resource in recursos[0] %}
+                                    <option value="{{ resource['id'] }}">{{ resource['nombre'] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <h4>Número de documento</h4>
+                            <input class="form-control" type="number" min="1" placeholder="Número" name="document-number" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <h4>Domicilio</h4>
+                            <input class="form-control" type="text" placeholder="Domicilio" name="address" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <h4>Teléfono / Celular</h4>
+                            <input class="form-control" type="text" placeholder="Tel/ Cel" name="phone" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <h4>Obra Social</h4>
+                            <select class="form-control" id="selectObraSocial" name="health-insurance" required>
+                                <!-- recursos[1] es el tipo de obra social -->
+                                <option value="" disabled selected hidden>Elija una opcion</option>
+                                {% for resource in recursos[1] %}
+                                    <option value="{{ resource['id'] }}">{{ resource['nombre'] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <h4>Género</h4>
+                            <label class="radio-inline"><input type="radio" name="gender" value="Masculino" required>Masculino</label>
+                            <label class="radio-inline"><input type="radio" name="gender" value="Femenino">Femenino</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2>Datos demográficos</h2>
+
+        <div class="row setup-content">
+            <div class="col-xs-12">
+                <div class="col-md-12 well">
+
+                    <div class="modal-body">
+                        <div class="form-group col-md-6">
+                            <h4>Heladera</h4>
+                            <label class="radio-inline"><input type="radio" name="fridge" value="1" required>Si</label>
+                            <label class="radio-inline"><input type="radio" name="fridge" value="2">No</label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <h4>Calefacción</h4>
+                            <select class="form-control" id="selectCalefaccion" name="type-of-heating" required>
+                                <!-- recursos[4] es el tipo de obra social -->
+                                <option value="" disabled selected hidden>Elija una opcion</option>
+                                {% for resource in recursos[4] %}
+                                    <option value="{{ resource['id'] }}">{{ resource['nombre'] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <h4>Electricidad</h4>
+                            <label class="radio-inline"><input type="radio" name="electricity" value="1" required>Si</label>
+                            <label class="radio-inline"><input type="radio" name="electricity" value="2">No</label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <h4>Vivienda</h4>
+                            <select class="form-control" id="selectVivienda" name="type-of-housing" required>
+                                <!-- recursos[3] es el tipo de vivienda -->
+                                <option value="" disabled selected hidden>Elija una opcion</option>
+                                {% for resource in recursos[3] %}
+                                    <option value="{{ resource['id'] }}">{{ resource['nombre'] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <h4>Mascota(s)</h4>
+                            <label class="radio-inline"><input type="radio" name="pet" value="1" required>Si</label>
+                            <label class="radio-inline"><input type="radio" name="pet" value="2">No</label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <h4>Agua</h4>
+                            <select class="form-control" id="selectAgua" name="type-of-water" required>
+                                <!-- recursos[2] es el tipo de agua -->
+                                <option value="" disabled selected hidden>Elija una opcion</option>
+                                {% for resource in recursos[2] %}
+                                    <option value="{{ resource['id'] }}">{{ resource['nombre'] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-md-12">
+            <input type="submit" name="registerPatient-submit" id="registerPatient-submit" class="btn btn-primary col-md-4 pull-right" value="Confirmar">
+        </div>
+    </form>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+    {% include 'footer.html.twig' %}
+{% endblock %}

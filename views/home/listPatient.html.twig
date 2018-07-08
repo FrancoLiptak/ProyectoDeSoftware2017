@@ -1,0 +1,86 @@
+{% extends 'list.html.twig' %} 
+
+      {% block descriptionTable %}
+        <div class="header">
+            <h4 class="header-title">Registro de pacientes</h4>
+            <p title="Reporte" class="topButton"><a href="?controlador=report" class="btn btn-primary btn-xs">Reporte <span class="glyphicon glyphicon-stats"></span></a></p>
+        </div>
+      {% endblock %}
+
+      {% block fieldsHeadPrincipalTable %}
+        <th>Apellido</th>
+        <th>Nombre</th>
+        <th>Fecha de nacimiento</th>
+        <th>Género</th>
+        <th>Tipo de documento</th>
+        <th>Número de documento</th>
+        <th>Domicilio</th>
+        <th>Teléfono / Celular</th>
+        <th>Obra Social</th>
+        <th>Historia Clinica</th>
+        <th>Perfil</th>
+      {% endblock %}
+
+      
+{% block fieldsBodyPrincipalTable %}
+  {% for patient in patients %}
+    <tr>
+    <td>{{ patient.getLastName }}</td>
+    <td>{{ patient.getName }}</td>
+    <td>{{ patient.getBirthday }}</td>
+    <td>{{ patient.getGender }}</td>
+    <td>{{ patient.getDocumentType }}</td>
+    <td>{{ patient.getDocumentNumber }}</td>
+    <td>{{ patient.getAddress }}</td>
+    <td>{{ patient.getPhone }}</td>
+    <td>{{ patient.getHealthInsurance }}</td>
+    <td><a href="?controlador=medicalRecord&idPatient={{ patient.getId }}" class="btn btn-primary btn-xs">Historia clinica</a></td>
+    <td><a href="?controlador=perfilPatient&idPatient={{ patient.getId }}" class="btn btn-primary btn-xs">Perfil completo</a></td>
+    </tr>
+  {% endfor %}
+{% endblock %}
+
+{% block specificJs %}
+<script>
+$('#mytable').dataTable( {
+
+    "responsive": true,
+    "language": {
+
+        "sProcessing":     "Procesando...",
+        "sLengthMenu":     "Mostrar _MENU_ registros",
+        "sZeroRecords":    "No se encontraron resultados",
+        "sEmptyTable":     "Ningún dato disponible en esta tabla",
+        "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+        "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+        "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+        "sInfoPostFix":    "",
+        "sSearch":         "Buscar:",
+        "sUrl":            "",
+        "sInfoThousands":  ",",
+        "sLoadingRecords": "Cargando...",
+        "oPaginate": {
+            "sFirst":    "Primero",
+            "sLast":     "Último",
+            "sNext":     "Siguiente",
+            "sPrevious": "Anterior"
+        },
+        "oAria": {
+            "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+        }
+    },
+    "aoColumnDefs": [{ 
+        "bSortable": false,
+        "aTargets": [9,10]
+    }],
+    "lengthChange": false,
+    "pageLength": 
+    {%- for config in configuration -%}
+        {%- if (config.nombre == 'pageSize') -%}
+        {{- config.valor -}}
+        {%- endif -%}
+    {%- endfor -%}
+});
+</script>
+{% endblock %}

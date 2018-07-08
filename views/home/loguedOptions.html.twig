@@ -1,0 +1,12 @@
+<li>
+    <a href="#" class="[ dropdown-toggle ][ animate ]" data-toggle="dropdown"> {{ username }} <span class="[ caret ]"></span></a>
+    <ul class="[ dropdown-menu ]" style="right: 0;left: auto;" role="menu">
+        <li><a href="?controlador=session&accion=closeSession" class="[ animate ] drop-element">
+            <span class="pull-left">Cerrar sesion</span>
+            <span class="[ pull-right glyphicon glyphicon-remove ]"></span></a></li>
+    </ul>
+</li>
+
+{% block javascripts %}
+<script src="../js/jquery-3.2.1.min.js"></script>
+{% endblock %}

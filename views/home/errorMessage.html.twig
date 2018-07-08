@@ -1,0 +1,10 @@
+{%- if errorMessage is defined -%}
+    <div style="margin: 0 auto;">
+        <div class="col-md-12">    
+            <div class="alert alert-danger alert-dismissable">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                {{- errorMessage -}}
+            </div>
+        </div>
+    </div>
+{%- endif -%}

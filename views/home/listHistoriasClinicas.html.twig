@@ -1,0 +1,368 @@
+{% extends 'list.html.twig' %} 
+
+{% block specificCSS %}
+  <link rel="stylesheet" href="../css/listUsers.css">
+  <link rel="stylesheet" href="../css/historiaClinica.css">
+  {% endblock %}
+
+
+{% block descriptionTable %}
+
+{% include 'errorMessage.html.twig' %}
+  <div class="header">
+    <h4 class="content-title">Historia clinica - {{ paciente }}</h4>
+    <p data-placement="top" data-toggle="tooltip" title="Nuevo control" class="topButton"><button class="btn btn-primary btn-xs createbtn" data-title="Create" data-toggle="modal" data-target="#create" >Nuevo Control  <span class="glyphicon glyphicon-plus"></span></button></p>
+    <p title="Reporte" class="topButton firstButton"><a href="?controlador=report&idPatient={{ paciente_id }}" class="btn btn-primary btn-xs createbtn">Reporte <span class="glyphicon glyphicon-stats"></span></a></p>
+  </div>
+{% endblock %}
+
+{% block fieldsHeadPrincipalTable %}
+  <th>Fecha</th>
+  <th>Edad</th>
+  <th>Peso</th>
+  <th>¿Vacunas completas?</th>
+  <th>¿Maduracion acorde?</th>
+  <th>¿Examen fisico normal?</th>
+  <th>PC</th>
+  <th>PPC</th>
+  <th>Talla</th>
+  <th>Ver detalles</th>
+  <th>Editar</th>
+  <th>Eliminar</th>
+{% endblock %}
+
+{% block fieldsBodyPrincipalTable %}
+
+{% for healthControl in healthControls %}
+  <tr>
+    <td>{{- healthControl.fecha -}}</td>
+    <td>{{- (healthControl.edad/(60*60*24*365))|round -}}</td>
+    <td>{{- healthControl.pesa -}}</td>
+    <td>{%- if healthControl.vacunas_completas == 1 -%}
+          Si
+        {%- else -%}
+          No
+        {%- endif -%}</td>
+    <td>{%- if healthControl.maduracion_acorde == 1 -%}
+          Si
+        {%- else -%}
+          No
+        {%- endif -%}</td>
+    <td>{%- if healthControl.ex_fisico_normal == 1 -%}
+          Si
+        {%- else -%}
+          No
+        {%- endif -%}</td>
+    <td>{{- healthControl.pc -}}</td>
+    <td>{{- healthControl.ppc -}}</td>
+    <td>{{- healthControl.talla -}}</td>
+    <td><p data-placement="top" data-toggle="tooltip" title="Detalles">
+      <button class="btn btn-primary btn-xs detailsbtn" 
+        data-id="{{ healthControl.id }}" 
+        data-fecha="{{ healthControl.fecha }}" 
+        data-edad="{{ (healthControl.edad/(60*60*24*365))|round }}" 
+        data-pesa="{{ healthControl.pesa }}" 
+        data-vacunas_completas="{{ healthControl.vacunas_completas }}" 
+        data-vacunas_observaciones="{{ healthControl.vacunas_observaciones }}" 
+        data-maduracion_acorde="{{ healthControl.maduracion_acorde }}" 
+        data-maduracion_observaciones="{{ healthControl.maduracion_observaciones }}" 
+        data-ex_fisico_normal="{{ healthControl.ex_fisico_normal }}" 
+        data-ex_fisico_observaciones="{{ healthControl.ex_fisico_observaciones }}" 
+        data-pc="{{ healthControl.pc }}" 
+        data-ppc="{{ healthControl.ppc }}" 
+        data-talla="{{ healthControl.talla }}" 
+        data-alimentacion="{{ healthControl.alimentacion }}" 
+        data-observaciones_generales="{{ healthControl.observaciones_generales }}" 
+        data-usuario="{{ healthControl.usuario }}" 
+        data-patientId="{{ healthControl.paciente_id }}"
+        data-title="Details" data-toggle="modal" data-target="#details" ><span class="glyphicon glyphicon-list-alt"></span></button></p>
+    </td>
+    <td><p data-placement="top" data-toggle="tooltip" title="Editar">
+      <button class="btn btn-primary btn-xs editbtn" 
+        data-id="{{ healthControl.id }}" 
+        data-fecha="{{ healthControl.fecha }}" 
+        data-pesa="{{ healthControl.pesa }}" 
+        data-vacunas_completas="{{ healthControl.vacunas_completas }}" 
+        data-vacunas_observaciones="{{ healthControl.vacunas_observaciones }}" 
+        data-maduracion_acorde="{{ healthControl.maduracion_acorde }}" 
+        data-maduracion_observaciones="{{ healthControl.maduracion_observaciones }}" 
+        data-ex_fisico_normal="{{ healthControl.ex_fisico_normal }}" 
+        data-ex_fisico_observaciones="{{ healthControl.ex_fisico_observaciones }}" 
+        data-pc="{{ healthControl.pc }}" 
+        data-ppc="{{ healthControl.ppc }}" 
+        data-talla="{{ healthControl.talla }}" 
+        data-alimentacion="{{ healthControl.alimentacion }}" 
+        data-observaciones_generales="{{ healthControl.observaciones_generales }}" 
+        data-patientId="{{ healthControl.paciente_id }}"
+        data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p>
+    </td>
+    <td>
+        {% if canDelete %}
+          <p data-placement="top" data-toggle="tooltip" title="Eliminar"><button class="btn btn-danger btn-xs deletebtn" data-id="{{ healthControl.id }}" data-patientId="{{ healthControl.paciente_id }}" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p>
+        {% else %}
+          No tiene los permisos necesarios.
+        {% endif %}
+    </td>
+  </tr>
+{% endfor %}
+
+{% endblock %}
+
+{% block formEdit %}
+      <form id="edit-form" action="?controlador=medicalRecord&accion=editMedicalRecord" method="post" >
+        <div class="modal-body col-md-6">
+          <div class="form-group">
+            <h4>Fecha del control</h4>
+            <input id="fecha" type="date" name="date" required>
+          </div>
+          <div class="form-group">
+            <h4>Peso <small>en kg</small></h4>
+            <input id="pesa" type="number" min="0" step=any placeholder="Peso" name="weight" required>
+          </div>
+          <div class="form-group">
+            <h4>¿Vacunas completas?</h4>
+            <label class="radio-inline"><input id="vacunas_completas_si" type="radio" name="vaccine" value="1" required>Si</label>
+            <label class="radio-inline"><input id="vacunas_completas_no" type="radio" name="vaccine" value="0" required>No</label>
+          </div>
+          <div class="form-group">
+            <h4>Vacunas observaciones</h4>
+            <textarea id="vacunas_observaciones" rows="3" name="vaccine-observations" placeholder="Vacunas observaciones" required ></textarea>
+          </div>
+          <div class="form-group">
+            <h4>¿Maduracion acorde?</h4>
+            <label class="radio-inline"><input id="maduracion_acorde_si" type="radio" name="maduration" value="1" required>Si</label>
+            <label class="radio-inline"><input id="maduracion_acorde_no" type="radio" name="maduration" value="0" required>No</label>
+          </div>
+          <div class="form-group">
+            <h4>Maduracion observaciones</h4>
+            <textarea id="maduracion_observaciones" rows="3" name="maduration-observations" placeholder="Maduracion observaciones" required ></textarea>
+          </div>
+          <div class="form-group">
+            <h4>¿Examen fisico normal?</h4>
+            <label class="radio-inline"><input id="ex_fisico_normal_si" type="radio" name="phisicalTest" value="1" required>Si</label>
+            <label class="radio-inline"><input id="ex_fisico_normal_no" type="radio" name="phisicalTest" value="0" required>No</label>
+          </div>
+          <div class="form-group">
+            <h4>Examen fisico observaciones</h4>
+            <textarea id="ex_fisico_observaciones" rows="3" name="phisicalTest-observations" placeholder="Examen fisico observaciones" required ></textarea>
+          </div>
+        </div>
+        <div class="modal-body col-md-6">
+          <div class="form-group">
+            <h4>PC: Percentilo Cefálico</h4>
+            <input id="pc" type="number" min="0" step=any placeholder="Percentilo Cefálico" name="PC" required>
+          </div>
+          <div class="form-group">
+            <h4>PPC: Percentilo Perímetro Cefálico</h4>
+            <input id="ppc" type="number" min="0" step=any placeholder="Percentilo Perímetro Cefálico" name="PPC" required>
+          </div>
+          <div class="form-group">
+            <h4>Talla</h4>
+            <input id="talla" type="number" min="0" step=any placeholder="Talla" name="height" required>
+          </div>
+          <div class="form-group">
+              <h4>Alimentacion</h4>
+              <textarea id="alimentacion" rows="3" name="feeding" placeholder="Alimentacion" required ></textarea>
+          </div>
+          <div class="form-group">
+              <h4>Observaciones generales</h4>
+              <textarea id="observaciones_generales" rows="3" name="observations" placeholder="Observaciones" required ></textarea>
+          </div>
+          <input type="hidden" id="editId" name="editId">
+          <input type="hidden" id="editPatientId" name="patientId">
+        </div>
+        <div class="modal-footer ">
+            <input type="submit" name="edit-submit" id="edit-submit" style="width: 100%;" class="form-control btn btn-primary btn-lg" value="Actualizar">
+        </div>
+      </form>
+{% endblock %}
+
+{% block formDelete %}
+
+  <!-- PARA ELIMINAR -->
+  <form method="post" action="?controlador=medicalRecord&accion=deleteMedicalRecord" class="modal fade" id="delete" aria-labelledby="edit" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+          <h4 class="modal-title custom_align">Eliminar estos datos</h4>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-danger">
+            <span class="glyphicon glyphicon-warning-sign"></span> ¿Está seguro de eliminar estos datos?
+          </div>
+        </div>
+        <div class="modal-footer ">
+          <input type="hidden" id="deleteId" name="deleteId">
+          <input type="hidden" id="deletePatientId" name="patientId">
+          <button type="submit" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"></span>Si</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span>No</button>
+        </div>
+      </div>
+      <!-- /.modal-content --> 
+    </div>
+    <!-- /.modal-dialog --> 
+  </form>
+
+  <div class="modal fade" id="details" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+          </button>
+          <h4 class="modal-title custom_align">Detalles</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+                <div>
+                  <h4>Usuario creador</h4>
+                  <p id="usuarioDetalle"></p>
+                </div>
+                <div class="form-group">
+                  <h4>Fecha del control</h4>
+                  <p id="fechaDetalle"></p>
+                </div>
+                <div class="form-group">
+                  <h4>Peso <small>en kg</small></h4>
+                  <p id="pesaDetalle"></p>
+                </div>
+                <div class="form-group">
+                  <h4>¿Vacunas completas?</h4>
+                  <p id="vacunas_completasDetalle"></p>
+                </div>
+                <div class="form-group">
+                  <h4>Vacunas observaciones</h4>
+                  <p id="vacunas_observacionesDetalle"></p>
+                </div>
+                <div class="form-group">
+                  <h4>¿Maduracion acorde?</h4>
+                  <p id="maduracion_acordeDetalle"></p>
+                </div>
+                <div class="form-group">
+                  <h4>Maduracion observaciones</h4>
+                  <p id="maduracion_observacionesDetalle"></p>
+                </div>
+                <div class="form-group">
+                  <h4>¿Examen fisico normal?</h4>
+                  <p id="ex_fisico_normalDetalle"></p>
+                </div>
+                <div class="form-group">
+                  <h4>Examen fisico observaciones</h4>
+                  <p id="ex_fisico_observacionesDetalle"></p>
+                </div>      
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <h4>PC: Percentilo Cefálico</h4>
+                <p id="pcDetalle"></p>
+              </div>
+              <div class="form-group">
+                <h4>PPC: Percentilo Perímetro Cefálico</h4>
+                <p id="ppcDetalle"></p>
+              </div>
+              <div class="form-group">
+                <h4>Talla</h4>
+                <p id="tallaDetalle"></p>
+              </div>
+              <div class="form-group">
+                  <h4>Alimentacion</h4>
+                <p id="alimentacionDetalle"></p>
+              </div>
+              <div class="form-group">
+                <h4>Observaciones generales</h4>
+                <p id="observaciones_generalesDetalle"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.modal-content --> 
+    </div>
+  <!-- /.modal-dialog --> 
+  </div>
+
+  <div class="modal fade" id="create" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </button>
+            <h4 class="modal-title custom_align" >Editar</h4>
+          </div>
+          <form id="create-form" action="?controlador=medicalRecord&accion=createMedicalRecord" method="post" >
+            <div class="modal-body col-md-6">
+              <div class="form-group">
+                <h4>Peso <small>en kg</small></h4>
+                <input type="number" min="0" step=any placeholder="Peso" name="weight" required>
+              </div>
+              <div class="form-group">
+                <h4>¿Vacunas completas?</h4>
+                <label class="radio-inline"><input type="radio" name="vaccine" value="1" required>Si</label>
+                <label class="radio-inline"><input type="radio" name="vaccine" value="0" required>No</label>
+              </div>
+              <div class="form-group">
+                <h4>Vacunas observaciones</h4>
+                <textarea rows="3" name="vaccine-observations" id="vaccine-observations" placeholder="Vacunas observaciones" required ></textarea>
+              </div>
+              <div class="form-group">
+                <h4>¿Maduracion acorde?</h4>
+                <label class="radio-inline"><input type="radio" name="maduration" value="1" required>Si</label>
+                <label class="radio-inline"><input type="radio" name="maduration" value="0" required>No</label>
+              </div>
+              <div class="form-group">
+                <h4>Maduracion observaciones</h4>
+                <textarea rows="3" name="maduration-observations" id="maduration-observations" placeholder="Maduracion observaciones" required ></textarea>
+              </div>
+              <div class="form-group">
+                <h4>¿Examen fisico normal?</h4>
+                <label class="radio-inline"><input type="radio" name="phisicalTest" value="1" required>Si</label>
+                <label class="radio-inline"><input type="radio" name="phisicalTest" value="0" required>No</label>
+              </div>
+              <div class="form-group">
+                <h4>Examen fisico observaciones</h4>
+                <textarea rows="3" name="phisicalTest-observations" id="phisicalTest-observations" placeholder="Examen fisico observaciones" required ></textarea>
+              </div>
+            </div>
+            <div class="modal-body col-md-6">
+              <div class="form-group">
+                <h4>PC: Percentilo Cefálico</h4>
+                <input type="number" min="0" step=any placeholder="Percentilo Cefálico" name="PC" required>
+              </div>
+              <div class="form-group">
+                <h4>PPC: Percentilo Perímetro Cefálico</h4>
+                <input type="number" min="0" step=any placeholder="Percentilo Perímetro Cefálico" name="PPC" required>
+              </div>
+              <div class="form-group">
+                <h4>Talla</h4>
+                <input type="number" min="0" step=any placeholder="Talla" name="height" required>
+              </div>
+              <div class="form-group">
+                  <h4>Alimentacion</h4>
+                  <textarea rows="3" name="feeding" id="feeding" placeholder="Alimentacion" required ></textarea>
+              </div>
+              <div class="form-group">
+                  <h4>Observaciones generales</h4>
+                  <textarea rows="3" name="observations" id="observations" placeholder="Observaciones" required ></textarea>
+              </div>
+              <input type="hidden" name="patientId" value="{{ paciente_id }}">
+            </div>
+            <div class="modal-footer ">
+                <input type="submit" name="create-submit" id="create-submit" style="width: 100%;" class="form-control btn btn-primary btn-lg" value="Aceptar">
+            </div>
+          </form>                
+        </div>
+      </div>
+      <!-- /.modal-content --> 
+    <!-- /.modal-dialog --> 
+  {% endblock %}
+
+
+{% block specificJs %}
+<script src="../js/multipleSelect.js"></script>
+<script src="../js/listHistoriasClinicas.js"></script>
+<script src="../js/historiasClinicasTable.js"></script>
+{% endblock %}

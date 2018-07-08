@@ -1,0 +1,73 @@
+{% block stylesheets %}
+    <link rel="stylesheet" href="../css/footer_index.css">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+{% endblock %}
+
+<div class="content">
+</div>
+    <footer id="myFooter">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3">
+                    <ul>
+                        <li>
+                            <div class="center">
+                                <h5>
+                                    {%- for config in configuration -%}
+                                        {%- if (config.nombre == 'title') -%}
+                                            {{- config.valor -}}                            
+                                        {%- endif -%}
+                                    {%- endfor -%}
+                                </h5>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-3">
+                    <ul>
+                        <li>
+                            <div class="center">
+                                <h5>
+                                    Diagonal 114 329, La Plata, Buenos Aires
+                                </h5>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-3">
+                    <ul>
+                        <li>
+                            <div class="center">
+                                <h5>
+                                    0221 483-0171
+                                </h5>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-3">
+                    <ul>
+                        <li>
+                            <div class="center">
+                                <h5>
+                                    {%- for config in configuration -%}
+                                        {%- if (config.nombre == 'email') -%}
+                                            {{- config.valor -}}                            
+                                        {%- endif -%}
+                                    {%- endfor -%}
+                                </h5>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <iframe id="map-container" style="border:0"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3272.428186889677!2d-57.95012444960951!3d-34.89570258028863!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95a2e65a5146a4fd%3A0xf673863d8a6bfd43!2sHospital+Dr.+Ricardo+Guti%C3%A9rrez!5e0!3m2!1ses-419!2sar!4v1507592543955" title="Ubicación del hospital"></iframe>
+        </div>
+        <div class="social-networks">
+            <a href="https://www.facebook.com/pages/Hospital-Zonal-de-Agudos-Dr-Ricardo-Guti%C3%A9rrez/143694942367566" class="facebook"><i class="fa fa-facebook"></i></a>
+        </div>
+        <div class="footer-copyright">
+            <p> © 2017 Hospital Dr. Ricardo Guitérrez - Todos los derechos reservados. </p>
+        </div>
+    </footer>

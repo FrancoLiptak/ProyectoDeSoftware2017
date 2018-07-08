@@ -1,0 +1,28 @@
+.topButton {
+    float: right;
+    display: inline-block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.firstButton {
+    padding-right: 10px;
+}
+
+.content-title {
+    display: inline-block
+}
+
+.header {
+    overflow: hidden
+}
+
+@media screen and (max-width: 440px) {
+    .topButton {
+        float: none ;
+	}
+	
+	.content-title{
+        display: block;
+    }
+}

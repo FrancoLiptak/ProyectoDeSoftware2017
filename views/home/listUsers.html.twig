@@ -1,0 +1,179 @@
+{% extends 'list.html.twig' %} 
+
+{% block specificCSS %}
+<link rel="stylesheet" href="../css/listUsers.css">
+{% endblock %}
+
+
+{% block descriptionTable %}
+
+{% include 'errorMessage.html.twig' %}
+
+  <h4>Registro de Usuarios </h4>
+{% endblock %}
+
+{% block fieldsHeadPrincipalTable %}
+  <th>Apellido</th>
+  <th>Nombre</th>
+  <th>Email</th>
+  <th>Nombre de usuario</th>
+  <th>Rol</th>
+  <th>¿Activo?</th>
+  <th>Editar</th>
+  {% if isAdmin == 1 %}
+    <th>Eliminar</th>
+  {% endif %}
+{% endblock %}
+
+{% block fieldsBodyPrincipalTable %}
+  {% for user in users %}
+    <tr>
+      <td>{{ user.getLastName }}</td>
+      <td>{{ user.getFirstName }}</td>
+      <td>{{ user.getEmail }}</td>
+      <td>{{ user.getUserName }}</td>
+      <td>
+          {% for rol in user.getRoles %}
+            | {{ rol }} |
+          {% endfor %}
+      </td>
+      <td>
+          {% if user.getActivo == 1 %}
+              Activo
+          {% elseif user.getActivo == 0 %}
+              No Activo
+          {% endif %}
+      </td>
+      <td><p data-placement="top" data-toggle="tooltip" title="Editar"><button class="btn btn-primary btn-xs editbtn" data-id="{{ user.getId }}" data-username="{{ user.getUserName }}" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+      {% if isAdmin == 1 %}
+        <td><p data-placement="top" data-toggle="tooltip" title="Eliminar"><button class="btn btn-danger btn-xs deletebtn" data-id="{{ user.getId }}" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
+      {% endif %}
+    </tr>
+  {% endfor %}  
+{% endblock %}
+
+{% block formEdit %}
+      <form id="edit-form" action="?controlador=listUsers&accion=editUser" method="post" >
+        <div class="modal-body col-md-6">
+          <div class="form-group">
+            <h4>Apellido</h4>
+            <input class="form-control" type="text" placeholder="Apellido" id="editLastName" name="editLastName" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,64}" required>
+          </div>
+          <div class="form-group">
+            <h4>Nombre</h4>
+            <input class="form-control" type="text" placeholder="Nombre" id="editName" name="editName" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}" required>
+          </div>
+          <div class="form-group">
+            <h4>Email</h4>
+            <input class="form-control" type="text" placeholder="Email" id="editEmail" name="editEmail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>
+          </div>
+
+          <div class="form-group">
+              <h4>Rol <small>manten presionado ctrl para seleccionar más de una opción</small></h4>
+                  <select name="roles[]" id="editRol" class="multiselect-ui form-control" multiple="multiple">
+                      {% for role in roles %}
+                          <option value="{{- role.nombre -}}">{{- role.nombre|capitalize -}}</option>
+                      {% endfor %}
+                  </select>
+          </div>
+        </div>
+
+        <div class="modal-body col-md-6">
+          <div class="form-group">
+            <h4>Nombre de usuario</h4>
+            <input class="form-control" type="text" placeholder="Nombre de usuario" id="editUserName" name="editUserName" pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$" required>
+          </div>
+          <div class="form-group">
+            <h4>Resetear contraseña</h4>
+            <input class="form-control" type="text" placeholder="Contraseña" id="editPassword" name="editPassword">
+          </div>
+          <div class="form-group">
+              <h4>¿Activo?</h4>
+              <select class="form-control" id="editActivo" name="editActivo">
+                <option value="1">Activo</option>
+                <option value="0">No activo</option>
+              </select>
+            </div>
+        </div>
+        <div class="modal-footer ">
+            <input type="hidden" id="userNameEdit" name="userNameEdit">
+            <input type="hidden" id="editId" name="editId">
+            <input type="submit" name="edit-submit" id="edit-submit" style="width: 100%;" tabindex="7" class="form-control btn btn-primary btn-lg" value="Actualizar">
+          </div>
+
+      </form>
+{% endblock %}
+
+{% block formDelete %}
+
+  <!-- PARA ELIMINAR -->
+  <form method="post" action="?controlador=listUsers&accion=deleteUser" class="modal fade" id="delete" tabindex="-1" aria-labelledby="edit" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+          <h4 class="modal-title custom_align" >Eliminar estos datos</h4>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-danger">
+            <span class="glyphicon glyphicon-warning-sign"></span> ¿Está seguro de eliminar estos datos?
+          </div>
+        </div>
+        <div class="modal-footer ">
+          <input type="hidden" id="deleteId" name="deleteId">
+          <button type="submit" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"></span>Si</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span>No</button>
+        </div>
+      </div>
+      <!-- /.modal-content --> 
+    </div>
+    <!-- /.modal-dialog --> 
+  </form>
+{% endblock %}
+
+
+{% block specificJs %}
+<script src="../js/listUser.js"></script>
+<script src="../js/multipleSelect.js"></script>
+<script>
+$('#mytable').dataTable( {
+    "responsive": true,
+    "language": {
+
+        "sProcessing":     "Procesando...",
+        "sLengthMenu":     "Mostrar _MENU_ registros",
+        "sZeroRecords":    "No se encontraron resultados",
+        "sEmptyTable":     "Ningún dato disponible en esta tabla",
+        "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+        "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+        "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+        "sInfoPostFix":    "",
+        "sSearch":         "Buscar:",
+        "sUrl":            "",
+        "sInfoThousands":  ",",
+        "sLoadingRecords": "Cargando...",
+        "oPaginate": {
+            "sFirst":    "Primero",
+            "sLast":     "Último",
+            "sNext":     "Siguiente",
+            "sPrevious": "Anterior"
+        },
+        "oAria": {
+            "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+        }
+    },
+    "aoColumnDefs": [{ 
+        "bSortable": false,
+        "aTargets": [6,7]
+    }],
+    "lengthChange": false,
+    "pageLength": 
+    {%- for config in configuration -%}
+        {%- if (config.nombre == 'pageSize') -%}
+        {{- config.valor -}}
+        {%- endif -%}
+    {%- endfor -%}
+});
+</script>
+{% endblock %}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-theme.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/base.css">
+
+    <link rel="stylesheet" href="../css/navbar.css">
+    {% block stylesheets %}
+    {% endblock %}
+
+    <link rel="icon" href="images/hospGutierrez.gif">
+    <title>Hospital Gutiérrez</title>
+</head>
+    
+    {% include 'navbar.html.twig' %}
+    
+    {%- for config in configuration -%}
+        {%- if (config.nombre == 'maintenance') -%}
+            {%- if ((config.valor == 'enable') or (isAdmin == 1)) -%}
+            {% block body %}
+            {% endblock %}
+            {%- else -%}
+                <style>
+                    h1 { font-size: 60px; }
+                    body { font: 20px Helvetica, sans-serif; color: #333; }
+                    article { display: block; text-align: left; width: 650px; margin: 0 auto; margin-top: 100px; }
+                </style>
+              
+                <article>
+                    <h1>Volveremos pronto!</h1>
+                    <div>
+                        <p>Perdón por los inconvenientes. Estamos trabajando para solucionar todos los problemas en el sitio.</p>
+                        <p>- Equipo de mantenimiento del sistema de Hospital Gutiérrez</p>
+                    </div>
+                </article>
+            {%- endif -%}
+        {%- endif -%}
+    {%- endfor -%}
+
+    
+    <!-- Javascripts -->
+    
+    <script src="../js/jquery-3.2.1.min.js"></script>
+    <script src="../js/bootstrap.js"></script>
+
+    <script src="../js/navbar.js"></script>
+
+    {% block javascripts %}
+    {% endblock %}
+
+    
+    {% block footer %}
+    {% endblock %}
+
+</body>
+</html>
